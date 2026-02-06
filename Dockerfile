@@ -11,7 +11,7 @@
 #       --checkpoint_path ./checkpoints/sam-3d-body-dinov3/model.ckpt \
 #       --mhr_path ./checkpoints/sam-3d-body-dinov3/assets/mhr_model.pt
 
-FROM nvidia/cuda:12.4.1-cudnn-devel-ubuntu22.04
+FROM nvidia/cuda:12.4.1-cudnn-devel-ubuntu24.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -65,7 +65,7 @@ RUN python -m pip install --upgrade pip setuptools wheel
 
 # ---- NumPy + modern cu128 PyTorch (key part) ----
 RUN python -m pip install "numpy<2"
-RUN python -m pip install --index-url https://download.pytorch.org/whl/cu128 \
+RUN python -m pip install --index-url https://download.pytorch.org/whl/cu124 \
     torch==2.8.0 torchvision==0.23.0 torchaudio==2.8.0
 
 # ---- Copy repo ----
