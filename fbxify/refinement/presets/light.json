@@ -1,0 +1,78 @@
+{
+  "enabled": true,
+  "profiles": {
+    "root": {
+      "max_pos_speed": 2.5,
+      "max_pos_accel": 30,
+      "max_ang_speed_deg": 240,
+      "max_ang_accel_deg": 3600,
+      "method": "ema",
+      "cutoff_hz": 3.0,
+      "one_euro_min_cutoff": 2.0,
+      "one_euro_beta": 0.7,
+      "one_euro_d_cutoff": 1.2,
+      "root_cutoff_xy_hz": 2.0,
+      "root_cutoff_z_hz": 0.9
+    },
+    "*hand*": {
+      "max_pos_speed": 2.0,
+      "max_pos_accel": 25,
+      "max_ang_speed_deg": 720,
+      "max_ang_accel_deg": 9000,
+      "method": "one_euro",
+      "cutoff_hz": 6.0,
+      "one_euro_min_cutoff": 2.2,
+      "one_euro_beta": 0.9,
+      "one_euro_d_cutoff": 1.5
+    },
+    "*finger*": {
+      "max_pos_speed": 1.2,
+      "max_pos_accel": 12,
+      "max_ang_speed_deg": 360,
+      "max_ang_accel_deg": 5000,
+      "method": "one_euro",
+      "cutoff_hz": 6.0,
+      "one_euro_min_cutoff": 1.2,
+      "one_euro_beta": 0.5,
+      "one_euro_d_cutoff": 1.2
+    },
+    "*head*": {
+      "max_pos_speed": 3.0,
+      "max_pos_accel": 35,
+      "max_ang_speed_deg": 300,
+      "max_ang_accel_deg": 5000,
+      "method": "one_euro",
+      "cutoff_hz": 5.0,
+      "one_euro_min_cutoff": 2.2,
+      "one_euro_beta": 0.8,
+      "one_euro_d_cutoff": 1.3
+    },
+    "*leg*": {
+      "max_pos_speed": 2.5,
+      "max_pos_accel": 35,
+      "max_ang_speed_deg": 500,
+      "max_ang_accel_deg": 6000,
+      "method": "ema",
+      "cutoff_hz": 4.0,
+      "one_euro_min_cutoff": 2.0,
+      "one_euro_beta": 0.7,
+      "one_euro_d_cutoff": 1.2
+    },
+    "*": {
+      "max_pos_speed": 2.5,
+      "max_pos_accel": 30,
+      "max_ang_speed_deg": 450,
+      "max_ang_accel_deg": 5000,
+      "method": "one_euro",
+      "cutoff_hz": 5.0,
+      "one_euro_min_cutoff": 1.4,
+      "one_euro_beta": 0.45,
+      "one_euro_d_cutoff": 1.0
+    }
+  },
+  "do_spike_fix": true,
+  "do_rotation_smoothing": true,
+  "do_vector_smoothing": true,
+  "do_root_motion_fix": true,
+  "do_interpolate_missing_keyframes": false
+}
