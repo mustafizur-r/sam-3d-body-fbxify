@@ -4,7 +4,7 @@ import os
 
 load_dotenv()
 
-vith_out_dir = "checkpoints/sam-3d-body-vith"
+vith_out_dir = "./checkpoints/sam-3d-body-vith"
 os.makedirs(vith_out_dir, exist_ok=True)
 
 snapshot_download(
@@ -13,7 +13,7 @@ snapshot_download(
     token=os.getenv("HF_TOKEN")
 )
 
-dinov3_out_dir = "checkpoints/sam-3d-body-dinov3"
+dinov3_out_dir = "./checkpoints/sam-3d-body-dinov3"
 os.makedirs(dinov3_out_dir, exist_ok=True)
 
 snapshot_download(
