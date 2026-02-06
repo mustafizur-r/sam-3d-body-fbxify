@@ -73,6 +73,7 @@ WORKDIR /workspace
 COPY . .
 
 # ---- SAM-3D-Body Python deps ----
+# ---- SAM-3D-Body Python deps ----
 RUN python -m pip install \
       pytorch-lightning \
       roma \
@@ -84,7 +85,6 @@ RUN python -m pip install \
       timm \
       dill \
       pandas \
-      mhr \
       rich \
       hydra-core \
       hydra-submitit-launcher \
@@ -112,8 +112,10 @@ RUN python -m pip install \
       pyopengl-accelerate \
       git+https://github.com/microsoft/MoGe.git
 
-
+# ---- Install MHR + Momentum from GitHub (pip wheels not available) ----
+RUN python -m pip install git+https://github.com/facebookresearch/MHR.git
 RUN python -m pip install git+https://github.com/facebookresearch/momentum.git
+
 
 # ---- Additional fbxify Python deps ----
 RUN python -m pip install \
