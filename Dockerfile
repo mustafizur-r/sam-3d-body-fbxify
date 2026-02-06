@@ -78,7 +78,6 @@ RUN python -m pip install \
       roma \
       pyrender \
       opencv-python \
-      pymomentum-gpu==0.1.94.post0 \
       yacs \
       scikit-image \
       einops \
@@ -112,7 +111,10 @@ RUN python -m pip install \
       pyopengl \
       pyopengl-accelerate \
       git+https://github.com/microsoft/MoGe.git
-      
+
+
+RUN python -m pip install git+https://github.com/facebookresearch/momentum.git
+
 # ---- Additional fbxify Python deps ----
 RUN python -m pip install \
       mathutils
