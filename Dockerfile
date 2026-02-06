@@ -23,6 +23,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     cmake \
     wget \
+    curl \
+    unzip \
     # OpenGL libs (we'll use EGL, OSMesa is mostly harmless to keep)
     libgl1 \
     libegl1 \
@@ -48,6 +50,15 @@ RUN /opt/blender/5.0/python/bin/python3.11 -m ensurepip && \
 # ---- Python venv ----
 RUN python3.12 -m venv /opt/venv
 ENV PATH="/opt/venv/bin:${PATH}"
+
+# ---- MHR assets (download + extract into site-packages) ----
+RUN set -e; \
+    TARGET_DIR="/opt/venv/lib/python3.12/site-packages"; \
+    mkdir -p "${TARGET_DIR}"; \
+    curl -L -o /tmp/assets.zip https://github.com/facebookresearch/MHR/releases/download/v1.0.0/assets.zip; \
+    unzip -o /tmp/assets.zip -d "${TARGET_DIR}"; \
+    rm -f /tmp/assets.zip
+
 
 # ---- Core Python tooling ----
 RUN python -m pip install --upgrade pip setuptools wheel
