@@ -11,7 +11,7 @@
 #       --checkpoint_path ./checkpoints/sam-3d-body-dinov3/model.ckpt \
 #       --mhr_path ./checkpoints/sam-3d-body-dinov3/assets/mhr_model.pt
 
-FROM nvidia/cuda:12.4.1-cudnn-devel-ubuntu24.04
+FROM nvidia/cuda:12.4.1-cudnn-devel-ubuntu22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
