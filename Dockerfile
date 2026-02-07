@@ -11,14 +11,13 @@
 #       --checkpoint_path ./checkpoints/sam-3d-body-dinov3/model.ckpt \
 #       --mhr_path ./checkpoints/sam-3d-body-dinov3/assets/mhr_model.pt
 
-#FROM nvidia/cuda:12.8.1-cudnn-devel-ubuntu24.04
-FROM nvidia/cuda:12.4.1-cudnn-devel-ubuntu22.04
+FROM nvidia/cuda:12.8.1-cudnn-devel-ubuntu24.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
 # ---- System deps ----
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    python3 python3-dev python3-venv python3-pip \
+    python3.12 python3.12-dev python3.12-venv python3-pip \
     git \
     ffmpeg \
     build-essential \
@@ -49,42 +48,44 @@ RUN /opt/blender/5.0/python/bin/python3.11 -m ensurepip && \
     /opt/blender/5.0/python/bin/python3.11 -m pip install mediapipe
 
 # ---- Python venv ----
-RUN python3 -m venv /opt/venv
+RUN python3.12 -m venv /opt/venv
 ENV PATH="/opt/venv/bin:${PATH}"
 
 # ---- MHR assets (download + extract into site-packages) ----
 RUN set -e; \
-    TARGET_DIR="$(python -c 'import site; print(site.getsitepackages()[0])')"; \
+    TARGET_DIR="/opt/venv/lib/python3.12/site-packages"; \
+    mkdir -p "${TARGET_DIR}"; \
     curl -L -o /tmp/assets.zip https://github.com/facebookresearch/MHR/releases/download/v1.0.0/assets.zip; \
     unzip -o /tmp/assets.zip -d "${TARGET_DIR}"; \
     rm -f /tmp/assets.zip
 
 
-
 # ---- Core Python tooling ----
 RUN python -m pip install --upgrade pip setuptools wheel
-RUN python -m pip install "numpy<2"
-RUN python -m pip install --index-url https://download.pytorch.org/whl/cu124 \
-    torch torchvision torchaudio
 
+# ---- NumPy + modern cu128 PyTorch (key part) ----
+RUN python -m pip install "numpy<2"
+RUN python -m pip install --index-url https://download.pytorch.org/whl/cu128 \
+    torch==2.8.0 torchvision==0.23.0 torchaudio==2.8.0
 
 # ---- Copy repo ----
 WORKDIR /workspace
 COPY . .
 
 # ---- SAM-3D-Body Python deps ----
-# ---- SAM-3D-Body Python deps ----
 RUN python -m pip install \
       pytorch-lightning \
       roma \
       pyrender \
       opencv-python \
+      pymomentum-gpu==0.1.94.post0 \
       yacs \
       scikit-image \
       einops \
       timm \
       dill \
       pandas \
+      mhr \
       rich \
       hydra-core \
       hydra-submitit-launcher \
@@ -112,11 +113,6 @@ RUN python -m pip install \
       pyopengl-accelerate \
       git+https://github.com/microsoft/MoGe.git
 
-# ---- Install MHR + Momentum from GitHub (pip wheels not available) ----
-RUN python -m pip install git+https://github.com/facebookresearch/MHR.git
-RUN python -m pip install git+https://github.com/facebookresearch/momentum.git
-
-
 # ---- Additional fbxify Python deps ----
 RUN python -m pip install \
       mathutils
@@ -127,10 +123,10 @@ RUN python -m pip install -U pip setuptools wheel packaging ninja psutil \
  && ( python -m pip wheel --only-binary=:all: --no-deps -w /wheelhouse flash-attn \
       || python -m pip wheel --no-deps --no-build-isolation -w /wheelhouse flash-attn ) \
  && python -m pip install --no-index --find-links=/wheelhouse flash-attn
-      
+
 # ---- xtcocotools needs to be installed separately
 RUN python -m pip install --no-build-isolation xtcocotools
-      
+
 # ---- Detectron2 (commit used in their INSTALL.md) ----
 RUN python -m pip install \
       "git+https://github.com/facebookresearch/detectron2.git@a1ce2f9" \
